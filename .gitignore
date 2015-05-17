@@ -1,0 +1,13 @@
+.gradle
+gradlew
+gradlew.bat
+gradle/*
+local.properties
+gradle.properties
+build.gradle
+settings.gradle
+.idea/*
+.DS_Store
+build/*
+captures/*
+FreeSpace.iml
