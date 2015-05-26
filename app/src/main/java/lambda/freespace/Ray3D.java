@@ -8,12 +8,12 @@ public class Ray3D {
 	
 	public Ray3D(Vector3 position, Vector3 vector) {
 		this.position = position;
-		this.vector = vector;
+		this.vector   = vector;
 	}
 	
 	public Ray3D(CameraPosition cameraPosition, Vector3 vector) {
 		this.position = cameraPosition.position;
-		this.vector = cameraPosition.orientation.mult(new Quaternion(vector)).mult(cameraPosition.orientation.conjugate()).forward(); //TODO wat does this do??
+		this.vector   = cameraPosition.orientation.transform(vector);
 	}
 	
 	public Vector3 midpointTo(Ray3D other) {

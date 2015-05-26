@@ -149,10 +149,9 @@ public class Quaternion {
         return m;
     }
     public Vector3 transform(final Vector3 v) {
-        final Quaternion q1 = new Quaternion(this).conjugate();
-        final Quaternion q2 = new Quaternion(v);
-        q1.multLeft(q2.multLeft(this));
-        return new Vector3(q1.x, q1.y, q1.z);
+        final Quaternion q1 = new Quaternion(v);
+        final Quaternion q2 = conjugate().multLeft(q1.multLeft(this));
+        return new Vector3(q2.x, q2.y, q2.z);
     }
     @Override
     public boolean equals(Object other) {
