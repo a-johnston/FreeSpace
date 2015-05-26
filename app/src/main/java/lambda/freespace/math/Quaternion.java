@@ -2,11 +2,11 @@ package lambda.freespace.math;
 
 public class Quaternion {
     public double x, y, z, w;
-    public static final Quaternion IDENTITY = new Quaternion();
+    public static final Quaternion IDENTITY = new Quaternion(0.0, 0.0, 0.0, 1.0);
     public static final Quaternion ONE      = new Quaternion(1.0, 1.0, 1.0, 1.0);
     public static final Quaternion ZERO     = new Quaternion(0.0, 0.0, 0.0, 0.0);
     public Quaternion() {
-        set(0.0, 0.0, 0.0, 1.0);
+        set(Quaternion.IDENTITY);
     }
     public Quaternion(final double x, final double y, final double z, final double w) {
         set(x, y, z, w);
@@ -68,6 +68,11 @@ public class Quaternion {
     public Quaternion conjugate() {
         return new Quaternion(-x, -y, -z, w);
     }
+    public Quaternion reciprocal() {
+        final double l = this.norm2();
+        if (l == 0) return Quaternion.ZERO;
+        return this.conjugate().mult(1.0 / l);
+    }
     public Quaternion mult(final double n) {
         return new Quaternion(x*n, y*n, z*n, w*n);
     }
@@ -78,12 +83,8 @@ public class Quaternion {
         final double nw = this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z;
         return new Quaternion(nx, ny, nz, nw);
     }
-    public Quaternion multLeft (Quaternion q) {
-        final double nx = q.w * this.x + q.x * this.w + q.y * this.z - q.z * y;
-        final double ny = q.w * this.y + q.y * this.w + q.z * this.x - q.x * z;
-        final double nz = q.w * this.z + q.z * this.w + q.x * this.y - q.y * x;
-        final double nw = q.w * this.w - q.x * this.x - q.y * this.y - q.z * z;
-        return new Quaternion(nx, ny, nz, nw);
+    public Quaternion multLeft(Quaternion q) {
+        return q.mult(this);
     }
     public Vector3 forward() {
         return new Vector3( 2 * (x * z + w * y),
@@ -149,9 +150,7 @@ public class Quaternion {
         return m;
     }
     public Vector3 transform(final Vector3 v) {
-        final Quaternion q1 = new Quaternion(v);
-        final Quaternion q2 = conjugate().multLeft(q1.multLeft(this));
-        return new Vector3(q2.x, q2.y, q2.z);
+        return new Vector3(this.mult(new Quaternion(v)).mult(this.conjugate()));
     }
     @Override
     public boolean equals(Object other) {
@@ -161,6 +160,7 @@ public class Quaternion {
         Quaternion q = (Quaternion)other;
         return ((this.x == q.x) && (this.y == q.y) && (this.z == q.z) && (this.w == q.w));
     }
+    @Override
     public String toString() {
         return "quaternion[" + x + " , " + y + " , " + z + " , " + w + "]";
     }

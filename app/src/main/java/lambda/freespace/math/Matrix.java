@@ -28,15 +28,6 @@ public class Matrix {
         return I;
     }
 
-    // return x^T y
-    public static double dot(double[] x, double[] y) {
-        if (x.length != y.length) throw new RuntimeException("Illegal vector dimensions.");
-        double sum = 0.0;
-        for (int i = 0; i < x.length; i++)
-            sum += x[i] * y[i];
-        return sum;
-    }
-
     // return C = A^T
     public static double[][] transpose(double[][] A) {
         int m = A.length;
@@ -191,44 +182,5 @@ public class Matrix {
     		}
     	}
     	System.out.print("}");
-    }
-
-    // test client
-    public static void main(String[] args) {
-        System.out.println("D");
-        System.out.println("--------------------");
-        double[][] d = { { 1, 2, 3 }, { 4, 5, 6 }, { 9, 1, 3} };
-        print(d);
-        System.out.println();
-
-        System.out.println("I");
-        System.out.println("--------------------");
-        double[][] c = Matrix.identity(5);
-        print(c);
-        System.out.println();
-
-        System.out.println("A");
-        System.out.println("--------------------");
-        double[][] a = Matrix.random(5, 5);
-        print(a);
-        System.out.println();
-
-        System.out.println("A^T");
-        System.out.println("--------------------");
-        double[][] b = Matrix.transpose(a);
-        print(b);
-        System.out.println();
-
-        System.out.println("A + A^T");
-        System.out.println("--------------------");
-        double[][] e = Matrix.add(a, b);
-        print(e);
-        System.out.println();
-
-        System.out.println("A * A^T");
-        System.out.println("--------------------");
-        double[][] f = Matrix.multiply(a, b);
-        print(f);
-        System.out.println();
     }
 }

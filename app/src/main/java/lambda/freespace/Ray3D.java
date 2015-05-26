@@ -34,10 +34,8 @@ public class Ray3D {
 	}
 	
 	public Vector3 midpointTo(Vector3 point) {
-		Vector3 pointToPoint = point.sub(position);
-		Vector3 vectorToClosestPoint = vector.normalize().mult(pointToPoint.dot(vector.normalize())); // TODO: easy optimization here
-		Vector3 closestPoint = position.add(vectorToClosestPoint);
-		Vector3 midpoint = closestPoint.mean(point);
-		return midpoint;
+		Vector3 translated = point.sub(position);
+        Vector3 direction = vector.normalize();
+		return position.add(direction.mult(translated.dot(direction))).mean(point);
 	}
 }

@@ -18,10 +18,10 @@ public class Motion3D {
 	}
 	
 	public void addFrame(CameraPosition cameraPosition, HashMap<Integer, Pixel> pixels) {
-		for (int blobID : pixels.keySet()) {
+        for (int blobID : pixels.keySet()) {
 			Pixel blobPixel = pixels.get(blobID);
 			Vector3 blobVector = screenSpec.pixelToVector(blobPixel);
-			Ray3D blobRay = new Ray3D(cameraPosition, blobVector);
+			Ray3D blobRay      = new Ray3D(cameraPosition, blobVector);
 			if (firstFrameRays.containsKey(blobID)) {
 				Ray3D blobRayOld = firstFrameRays.remove(blobID);
 				points.put(blobID, blobRay.midpointTo(blobRayOld));

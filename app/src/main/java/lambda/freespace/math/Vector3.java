@@ -1,7 +1,5 @@
 package lambda.freespace.math;
 
-import java.util.Vector;
-
 public class Vector3 {
     public double x, y, z;
     public static final Vector3 ZERO = new Vector3(0,0,0);
@@ -69,6 +67,15 @@ public class Vector3 {
         result.z = (this.x * v.y) - (this.y * v.x);
         return result;
     }
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() != Vector3.class) {
+            return false;
+        }
+        Vector3 v = (Vector3)other;
+        return ((this.x == v.x) && (this.y == v.y) && (this.z == v.z));
+    }
+    @Override
     public String toString() {
         return "vector3["+x+" , "+y+" , "+z+"]";
     }
