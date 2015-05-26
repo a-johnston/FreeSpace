@@ -2,11 +2,11 @@ package lambda.freespace.math;
 
 public class Quaternion {
     public double x, y, z, w;
-    public static final Quaternion identity = new Quaternion();
-    public static final Quaternion one      = new Quaternion(1,1,1,1);
-    public static final Quaternion zero     = new Quaternion(0,0,0,0);
+    public static final Quaternion IDENTITY = new Quaternion();
+    public static final Quaternion ONE      = new Quaternion(1.0, 1.0, 1.0, 1.0);
+    public static final Quaternion ZERO     = new Quaternion(0.0, 0.0, 0.0, 0.0);
     public Quaternion() {
-        set(0,0,0,1);
+        set(0.0, 0.0, 0.0, 1.0);
     }
     public Quaternion(final double x, final double y, final double z, final double w) {
         set(x, y, z, w);
@@ -35,14 +35,14 @@ public class Quaternion {
         return this;
     }
     public Quaternion set(final Vector3 axis, final double angle) {
-        final double half = angle/2f;
-        final double sin = Math.sin(half);
+        final double half = angle/2.0;
+        final double sin  = Math.sin(half);
         return this.set(axis.x*sin, axis.y*sin, axis.z*sin, Math.cos(half));
     }
     public Quaternion set(final double yaw, final double pitch, final double roll) {
-        final double hy  = yaw * 0.5f;
-        final double hp  = pitch * 0.5f;
-        final double hr  = roll * 0.5f;
+        final double hy  = yaw   * 0.5;
+        final double hp  = pitch * 0.5;
+        final double hr  = roll  * 0.5;
         final double shy = Math.sin(hy);
         final double chy = Math.cos(hy);
         final double shp = Math.sin(hp);
@@ -61,9 +61,9 @@ public class Quaternion {
         return this;
     }
     public Quaternion norm() {
-        double l = this.len();
-        if (l != 0) {
-            this.mult(1/l);
+        final double l = this.len();
+        if (l != 0.0) {
+            this.mult(1.0/l);
         }
         return this;
     }
@@ -95,31 +95,31 @@ public class Quaternion {
         return set(nx, ny, nz, nw);
     }
     public static Quaternion mult(final Quaternion a, final Quaternion b) {
-        Quaternion t = new Quaternion(a);
+        final Quaternion t = new Quaternion(a);
         return t.mult(b);
     }
     public Vector3 forward() {
         return new Vector3( 2 * (x * z + w * y),
-                2 * (y * x - w * x),
-                1 - 2 * (x * x + y * y));
+                            2 * (y * x - w * x),
+                            1 - 2 * (x * x + y * y));
     }
 
     public Vector3 up() {
         return new Vector3( 2 * (x * y - w * z),
-                1 - 2 * (x * x + z * z),
-                2 * (y * z + w * x));
+                            1 - 2 * (x * x + z * z),
+                            2 * (y * z + w * x));
     }
 
     public Vector3 right() {
         return new Vector3( 1 - 2 * (y * y + z * z),
-                2 * (x * y + w * z),
-                2 * (x * z - w * y));
+                            2 * (x * y + w * z),
+                            2 * (x * z - w * y));
     }
     public double len() {
-        return (float)Math.sqrt(len2());
+        return Math.sqrt(len2());
     }
     public double len2() {
-        return x*x+y*y+z*z+w*w;
+        return x*x + y*y + z*z + w*w;
     }
     public void toMatrix (final float[] m) {
         if (m.length != 16) {
@@ -136,18 +136,18 @@ public class Quaternion {
         final double zz = z * z;
         final double zw = z * w;
 
-        m[0] = (float)(1 - 2 * (yy + zz));
-        m[1] = (float)(2 * (xy + zw));
-        m[2] = (float)(2 * (xz - yw));
-        m[3] = 0;
+        m[0]  = (float)(1 - 2 * (yy + zz));
+        m[1]  = (float)(2 * (xy + zw));
+        m[2]  = (float)(2 * (xz - yw));
+        m[3]  = 0;
 
-        m[4] = (float)(2 * (xy - zw));
-        m[5] = (float)(1 - 2 * (xx + zz));
-        m[6] = (float)(2 * (yz + xw));
-        m[7] = 0;
+        m[4]  = (float)(2 * (xy - zw));
+        m[5]  = (float)(1 - 2 * (xx + zz));
+        m[6]  = (float)(2 * (yz + xw));
+        m[7]  = 0;
 
-        m[8] = (float)(2 * (xz + yw));
-        m[9] = (float)(2 * (yz - xw));
+        m[8]  = (float)(2 * (xz + yw));
+        m[9]  = (float)(2 * (yz - xw));
         m[10] = (float)(1 - 2 * (xx + yy));
         m[11] = 0;
 
@@ -156,22 +156,26 @@ public class Quaternion {
         m[14] = 0;
         m[15] = 1;
     }
-    public static float[] getNewMatrix(Quaternion q) {
+    public float[] toMatrix() {
         float[] m = new float[16];
-        q.toMatrix(m);
+        toMatrix(m);
         return m;
     }
-    public Vector3 transform(Vector3 v) {
-        Quaternion q1 = (new Quaternion(this)).conjugate();
-        Quaternion q2 = new Quaternion(v);
+    public Vector3 transform(final Vector3 v) {
+        final Quaternion q1 = new Quaternion(this).conjugate();
+        final Quaternion q2 = new Quaternion(v);
         q1.multLeft(q2.multLeft(this));
-        Vector3 r = new Vector3(q1.x, q1.y, q1.z);
-        return r;
+        return new Vector3(q1.x, q1.y, q1.z);
     }
-    public boolean equals(Quaternion q) {
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() != Quaternion.class) {
+            return false;
+        }
+        Quaternion q = (Quaternion)other;
         return ((this.x == q.x) && (this.y == q.y) && (this.z == q.z) && (this.w == q.w));
     }
     public String toString() {
-        return "quaternion["+x+" , "+y+" , "+z+" , "+w+"]";
+        return "quaternion[" + x + " , " + y + " , " + z + " , " + w + "]";
     }
 }
