@@ -7,6 +7,8 @@
  *
  *************************************************************************/
 
+package lambda.freespace.math;
+
 public class Matrix {
 
     // return a random m-by-n matrix with values between 0 and 1

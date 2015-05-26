@@ -1,23 +1,26 @@
+package lambda.freespace;
+
+import lambda.freespace.math.*;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Motion3D {
-	
 	private int frameNum = 0;
-	private HashMap<Integer, Point3D> points = new HashMap<>();
-	private PixelVectorConvertor screenSpec;
+	private HashMap<Integer, Vector3> points = new HashMap<>();
+	private PixelVectorConverter screenSpec;
 	private HashMap<Integer, Ray3D> firstFrameRays = new HashMap<>();
 	private LinkedList<CameraPosition> cameraHistory = new LinkedList<>();
 	
-	public Motion3D(PixelVectorConvertor screenSpec) {
+	public Motion3D(PixelVectorConverter screenSpec) {
 		this.screenSpec = screenSpec;
 	}
 	
 	public void addFrame(CameraPosition cameraPosition, HashMap<Integer, Pixel> pixels) {
 		for (int blobID : pixels.keySet()) {
 			Pixel blobPixel = pixels.get(blobID);
-			Point3D blobVector = screenSpec.pixelToVector(blobPixel);
+			Vector3 blobVector = screenSpec.pixelToVector(blobPixel);
 			Ray3D blobRay = new Ray3D(cameraPosition, blobVector);
 			if (firstFrameRays.containsKey(blobID)) {
 				Ray3D blobRayOld = firstFrameRays.remove(blobID);
@@ -46,7 +49,7 @@ public class Motion3D {
 		return cameraHistory.getLast();
 	}
 	
-	public Point3D getBlobPosition(int blobID) {
+	public Vector3 getBlobPosition(int blobID) {
 		return points.get(blobID);
 	}
 }

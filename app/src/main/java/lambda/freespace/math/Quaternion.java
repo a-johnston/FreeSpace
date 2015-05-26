@@ -60,43 +60,30 @@ public class Quaternion {
         w = (chy_chp * chr) + (shy_shp * shr);
         return this;
     }
-    public Quaternion norm() {
-        final double l = this.len();
-        if (l != 0.0) {
-            this.mult(1.0/l);
-        }
-        return this;
+    public Quaternion normalize() {
+        final double l = this.norm();
+        if (l == 0) return Quaternion.ZERO;
+        return this.mult(1.0/l);
     }
     public Quaternion conjugate() {
-        x = -x;
-        y = -y;
-        z = -z;
-        return this;
+        return new Quaternion(-x, -y, -z, w);
     }
-    public Quaternion mult(final double x) {
-        this.x *= x;
-        this.y *= x;
-        this.z *= x;
-        this.w *= x;
-        return this;
+    public Quaternion mult(final double n) {
+        return new Quaternion(x*n, y*n, z*n, w*n);
     }
     public Quaternion mult(final Quaternion q) {
         final double nx = this.w * q.x + this.x * q.w + this.y * q.z - this.z * q.y;
         final double ny = this.w * q.y + this.y * q.w + this.z * q.x - this.x * q.z;
         final double nz = this.w * q.z + this.z * q.w + this.x * q.y - this.y * q.x;
         final double nw = this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z;
-        return set(nx, ny, nz, nw);
+        return new Quaternion(nx, ny, nz, nw);
     }
     public Quaternion multLeft (Quaternion q) {
         final double nx = q.w * this.x + q.x * this.w + q.y * this.z - q.z * y;
         final double ny = q.w * this.y + q.y * this.w + q.z * this.x - q.x * z;
         final double nz = q.w * this.z + q.z * this.w + q.x * this.y - q.y * x;
         final double nw = q.w * this.w - q.x * this.x - q.y * this.y - q.z * z;
-        return set(nx, ny, nz, nw);
-    }
-    public static Quaternion mult(final Quaternion a, final Quaternion b) {
-        final Quaternion t = new Quaternion(a);
-        return t.mult(b);
+        return new Quaternion(nx, ny, nz, nw);
     }
     public Vector3 forward() {
         return new Vector3( 2 * (x * z + w * y),
@@ -115,10 +102,10 @@ public class Quaternion {
                             2 * (x * y + w * z),
                             2 * (x * z - w * y));
     }
-    public double len() {
-        return Math.sqrt(len2());
+    public double norm() {
+        return Math.sqrt(norm2());
     }
-    public double len2() {
+    public double norm2() {
         return x*x + y*y + z*z + w*w;
     }
     public void toMatrix (final float[] m) {

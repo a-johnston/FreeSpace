@@ -1,3 +1,4 @@
+package lambda.freespace;
 
 public class Pixel {
 	public int x;
