@@ -2,13 +2,13 @@ package lambda.freespace;
 
 import lambda.freespace.math.Vector3;
 
-public class PixelVectorConverter {
+public class ScreenSpec {
 	private final int screenWidth;
 	private final int screenHeight;
 	private final double horzDist;
 	private final double vertDist;
 	
-	public PixelVectorConverter(int screenWidth, int screenHeight, double horzFOV, double vertFOV) {
+	public ScreenSpec(int screenWidth, int screenHeight, double horzFOV, double vertFOV) {
 		this.screenWidth  = screenWidth;
 		this.screenHeight = screenHeight;
 		this.horzDist = 1.0 * Math.tan(horzFOV);

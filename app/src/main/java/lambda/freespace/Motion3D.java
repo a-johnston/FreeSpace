@@ -9,11 +9,11 @@ import java.util.List;
 public class Motion3D {
 	private int frameNum = 0;
 	private HashMap<Integer, Vector3> points = new HashMap<>();
-	private PixelVectorConverter screenSpec;
+	private ScreenSpec screenSpec;
 	private HashMap<Integer, Ray3D> firstFrameRays = new HashMap<>();
 	private LinkedList<CameraPosition> cameraHistory = new LinkedList<>();
 	
-	public Motion3D(PixelVectorConverter screenSpec) {
+	public Motion3D(ScreenSpec screenSpec) {
 		this.screenSpec = screenSpec;
 	}
 	
